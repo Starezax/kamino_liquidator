@@ -1,0 +1,6 @@
+[toolchain]
+channel = "nightly"
+components = ["rustfmt", "clippy"]
+
+[unstable]
+allow-features = ["const_option"] 
