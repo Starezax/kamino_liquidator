@@ -14,7 +14,6 @@ pub async fn get_all_obligations_for_market(
 ) -> Result<Vec<(Obligation, Pubkey)>> {
     info!("Fetching obligations for program: {} and lending market: {}", program_id, lending_market);
     
-    // We apply a single memcmp filter at the offset where 'lending_market' is located in the account data
     let lending_market_offset = 32; // 8 (discriminator) + 8 (tag) + 16 (LastUpdate)
     
     let filters = vec![
@@ -51,13 +50,12 @@ pub async fn get_all_obligations_for_market(
             continue;
         }
 
-        // If too short, skip
         if account.data.len() <= 8 {
             error!("Account data too short for anchor discriminator.");
             continue;
         }
 
-        // Skip the 8-byte Anchor discriminator
+
         match Obligation::try_from_slice(&account.data[8..]) {
             Ok(obligation) => {
                 if obligation.lending_market == *lending_market {

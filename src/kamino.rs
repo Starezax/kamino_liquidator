@@ -1,4 +1,3 @@
-//// filepath: /home/starezax/Desktop/liquidator_arsen/src/kamino.rs
 use solana_sdk::pubkey::Pubkey;
 use borsh::{BorshDeserialize, BorshSerialize};
 

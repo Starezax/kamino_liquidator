@@ -10,6 +10,7 @@ use env_logger;
 use serde::{Deserialize, Serialize};
 use std::fs::File;
 use std::io::Write;
+use std::time::Duration;
 
 #[derive(Serialize, Deserialize, Debug)]
 struct ObligationJson {
@@ -37,18 +38,23 @@ async fn main() -> Result<()> {
     env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("info"))
         .init();
     
-    // Load .env variables if present
     dotenv::from_path(std::path::PathBuf::from(".env")).ok();
     
     info!("Starting Lending Liquidator");
     
     let rpc_url = std::env::var("RPC_URL").expect("RPC_URL must be set");
-    let rpc_client = RpcClient::new_with_commitment(rpc_url, CommitmentConfig::confirmed());
+    
+    let rpc_client = RpcClient::new_with_timeout_and_commitment(
+        rpc_url,
+        Duration::from_secs(60), // 60 second timeout
+        CommitmentConfig::confirmed()
+    );
     
     let program_id = Pubkey::from_str("KLend2g3cP87fffoy8q1mQqGKjrxjC8boSyAYavgmjD")?;
     let lending_market = Pubkey::from_str("7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF")?;
     
     info!("Fetching obligations for lending market: {}", lending_market);
+
     let mut obligations = utils::get_all_obligations_for_market(&rpc_client, &program_id, &lending_market).await?;
     
     if obligations.is_empty() {
@@ -58,18 +64,15 @@ async fn main() -> Result<()> {
     
     info!("Found {} obligations total", obligations.len());
     
-    // Filter for obligations with active borrows
     let obligations_with_borrows = utils::filter_obligations_with_borrows(obligations);
     
     info!("Found {} obligations with active borrows", obligations_with_borrows.len());
     
     let mut obligations_json = Vec::new();
-    
-    // Process obligations and convert to JSON format
+
     for (i, (obligation, address)) in obligations_with_borrows.iter().enumerate() {
         info!("Processing obligation with borrows #{} - {}", i+1, address);
-        
-        // Count active deposits and borrows
+
         let active_deposits_count = obligation.deposits.iter()
             .filter(|deposit| deposit.deposit_reserve != Pubkey::default())
             .count();
@@ -77,8 +80,7 @@ async fn main() -> Result<()> {
         let active_borrows = obligation.borrows.iter()
             .filter(|borrow| borrow.borrow_reserve != Pubkey::default() && borrow.borrowed_amount_sf > 0)
             .collect::<Vec<_>>();
-        
-        // Convert borrows to JSON format
+
         let mut borrows_json = Vec::new();
         for (j, borrow) in active_borrows.iter().enumerate() {
             let borrow_json = BorrowJson {
@@ -89,8 +91,7 @@ async fn main() -> Result<()> {
             };
             borrows_json.push(borrow_json);
         }
-        
-        // Create obligation JSON
+
         let obligation_json = ObligationJson {
             address: address.to_string(),
             owner: obligation.owner.to_string(),
@@ -112,8 +113,7 @@ async fn main() -> Result<()> {
         info!("  Unhealthy borrow value: {}", obligation.unhealthy_borrow_value_sf);
         info!("  Active deposits: {}", active_deposits_count);
         info!("  Active borrows: {}", active_borrows.len());
-        
-        // Display information about each active borrow
+
         for (j, borrow) in active_borrows.iter().enumerate() {
             info!("    Borrow #{}: Reserve: {}, Amount: {}, Market Value: {}", 
                 j+1, 
@@ -123,8 +123,7 @@ async fn main() -> Result<()> {
             );
         }
     }
-    
-    // Write to JSON file
+
     let json_string = serde_json::to_string_pretty(&obligations_json)?;
     let mut file = File::create("obligations_with_borrows.json")?;
     file.write_all(json_string.as_bytes())?;
