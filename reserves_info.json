@@ -1,0 +1,326 @@
+[
+  {
+    "address": "StGKGcLQoTsWzQ1tFY2bWqrdiuBhqdFE4niiAutQxQB",
+    "mint_address": "8yzH74rJpSqRTte9fYfEMYi9G35JNNfUWbTYxwLy7sMD",
+    "symbol": "TOK7SMD",
+    "name": "dSOL",
+    "decimals": 243,
+    "oracle_address": "2byhtnufY8JbLaGhbjpaF9rVNsWXWjviY1o3tfYdEHj8",
+    "market_price": "218658992795096634750552232545567607016"
+  },
+  {
+    "address": "2UFz8kwraHybFyKhGQRwAsE5NtNpAhWs2X5grGoS7hnQ",
+    "mint_address": "8yzH74rJpSqH7PVRJU4Z6uaVZXyF92iyCHAmWVbq2Wvh",
+    "symbol": "TOK2WVH",
+    "name": "picoSOL",
+    "decimals": 221,
+    "oracle_address": "65neY1URYcgqdAn6nPec2q5EKczipb4bpB6nLKqgSTyN",
+    "market_price": "158918465665745176993925370570484210632"
+  },
+  {
+    "address": "EVbyPKrHG6WBfm4dLxLMJpUDY43cCAcHSpV3KYjKsktW",
+    "mint_address": "8yzH74rJpSq9vJvBqy4aep68Vj2q7RJt4bQqBA5n8ELw",
+    "symbol": "TOK8ELW",
+    "name": "JITOSOL",
+    "decimals": 0,
+    "oracle_address": "XwgZnsePNxVwtf3MsJsBjKP1dLDnZfvjtYQ8X89B9NP",
+    "market_price": "46359511121071628596724174449366714409"
+  },
+  {
+    "address": "HYnVhjsvU1vBKTPsXs1dWe6cJeuU8E4gjoYpmwe81KzN",
+    "mint_address": "8yzH74rJpSq9vJvBqy4aep68Vj2q7RJt4bQqBA5n8ELw",
+    "symbol": "TOK8ELW",
+    "name": "WBTC",
+    "decimals": 0,
+    "oracle_address": "4ehjAtdiV5tqfB79xomsCftLJq6cKmXQBZEYYiD4F7yN",
+    "market_price": "72120018998703224396005773894222654"
+  },
+  {
+    "address": "GFLLgX9V6PR1PzhgsGzeyUddpt2ws2PBRAxRwoLrboGp",
+    "mint_address": "8yzH74rJpSq9vJvBqy4aep68Vj2q7RJt4bQqBA5n8ELw",
+    "symbol": "TOK8ELW",
+    "name": "kSOLJITOSOLOrca",
+    "decimals": 0,
+    "oracle_address": "3Dq9xvVEd9GrKycRmdT9gojGc8q6Rb78AkZxukgZqnyu",
+    "market_price": "1357415446"
+  },
+  {
+    "address": "GhGPbkWmPjSkbkgZbhNGBTxzwQKjqDpZwNfaf2gQKgdG",
+    "mint_address": "8yzH74rJpSq9vJvBqy4aep68Vj2q7RJt4bQqBA5n8ELw",
+    "symbol": "TOK8ELW",
+    "name": "UXD",
+    "decimals": 0,
+    "oracle_address": "4y9biE4sUwBV82c5rxRtaECeQWNYeimyAetEXS9T24Ea",
+    "market_price": "103752523253751316800922721878120539682"
+  },
+  {
+    "address": "Bpc4kAh29J3YDQUMJJdGdr1zBAhTQjC48R1B8YTWudsi",
+    "mint_address": "8yzH74rJpSqNXMtTNxxLUrVvSZD6aZCLSdRH3gKga7TZ",
+    "symbol": "TOKA7TZ",
+    "name": "FDUSD",
+    "decimals": 79,
+    "oracle_address": "J9f7kRRgLQ3pd5Rq1BqxBQvJGW7xpAK9wSbTtLvRne7M",
+    "market_price": "275492475964599946178120512518603642639"
+  },
+  {
+    "address": "AxuWrPrJfwrUTvCWRxpkSQct6q8k1YSJzxhyYw2AAmv2",
+    "mint_address": "8yzH74rJpSq9vJvBqy4aep68Vj2q7RJt4bQqBA5n8ELw",
+    "symbol": "TOK8ELW",
+    "name": "kUXDUSDCOrca",
+    "decimals": 0,
+    "oracle_address": "EDFP9GQXZkW8gtb6ffmA2Xej51zaw9USgLktc5hs28zF",
+    "market_price": "42662187"
+  },
+  {
+    "address": "FPAwg5jadDs8AvUtvtAbit2RCZdkZES6yY5X6nCSuEw9",
+    "mint_address": "8yzH74rJpSq9vJvBqy4aep68Vj2q7RJt4bQqBA5n8ELw",
+    "symbol": "TOK8ELW",
+    "name": "kSOLMSOLRaydium",
+    "decimals": 0,
+    "oracle_address": "5ZGGgPXMiU53hNoCCYmSxgUvWnqC4QJMgNYj8zajPvrA",
+    "market_price": "30998047"
+  },
+  {
+    "address": "CHBNUPdjeo2N5QkZY2uAqv7TW5EbCTMsfvaskCBuxbom",
+    "mint_address": "8yzH74rJpSqUgvASyr3cVgQQ1nzDxBfKt2bgS7L4cVSm",
+    "symbol": "TOKCVSM",
+    "name": "vSOL",
+    "decimals": 21,
+    "oracle_address": "2v8Hf6AZuE5EhDka9zjrfXAp67pDzsmhy814vqzEKRn6",
+    "market_price": "83760694679040602586251972342762216780"
+  },
+  {
+    "address": "d4A2prbA2whesmvHaL88BH6Ewn5N4bTSU2Ze8P6Bc4Q",
+    "mint_address": "8yzH74rJpSqLrLxZm28kxuv1jHGeSDnVYJnZM1hG3MMB",
+    "symbol": "TOK3MMB",
+    "name": "SOL",
+    "decimals": 236,
+    "oracle_address": "BqEVMX9hqSBZLoxoYLexpiXzSL4TxkyicxbzM6pPviBh",
+    "market_price": "166647875203790083012518646476359524080"
+  },
+  {
+    "address": "EAA3VVsxUuQB1Tm5x7TJkq9ATtiX5Qwq8ok7gXwim7oo",
+    "mint_address": "8yzH74rJpSq9vJvBqy4aep68Vj2q7RJt4bQqBA5n8ELw",
+    "symbol": "TOK8ELW",
+    "name": "JLP",
+    "decimals": 0,
+    "oracle_address": "AwMqr8PzCytWjqioivZvPhuGkPy1GMa4FmFC6MtgqN4L",
+    "market_price": "8061712173"
+  },
+  {
+    "address": "febGYTnFX4GbSGoFHFeJXUHgNaK53fB23uDins9Jp1E",
+    "mint_address": "8yzH74rJpSq9vJvBqy4aep68Vj2q7RJt4bQqBA5n8ELw",
+    "symbol": "TOK8ELW",
+    "name": "ETH",
+    "decimals": 0,
+    "oracle_address": "2hGRFBvQyjYq5sZrn734CyHq4oNC2vjzN9iug4CrzxMQ",
+    "market_price": "41083854483102428496705158881474828150"
+  },
+  {
+    "address": "FBSyPnxtHKLBZ4UeeUyAnbtFuAmTHLtso9YtsqRDRWpM",
+    "mint_address": "8yzH74rJpSq9vJvBqy4aep68Vj2q7RJt4bQqBA5n8ELw",
+    "symbol": "TOK8ELW",
+    "name": "MSOL",
+    "decimals": 0,
+    "oracle_address": "6uA1NjVMAr7F2Pdz9mvpubrpfCNW6vggU1bgb4cBnguq",
+    "market_price": "82892232207812413358427754630847449153"
+  },
+  {
+    "address": "9Ukd2MSw5RvVFaN8jLhWxjHLEGiF1F6Hf7v3Zq5hZsKB",
+    "mint_address": "8yzH74rJpSq9vJvBqy4aep68Vj2q7RJt4bQqBA5n8ELw",
+    "symbol": "TOK8ELW",
+    "name": "JTO",
+    "decimals": 0,
+    "oracle_address": "BiNoWUWMVPYJTkdpR5FTtKBWkdpjfLFzSz8HaKwXT9nn",
+    "market_price": "24899144404164828847202766013969329453"
+  },
+  {
+    "address": "57U9pEC8NsWvHgWywd2xHTRkGQzWWYsWivxYRhtxZrLB",
+    "mint_address": "8yzH74rJpSqQMdimjyX1Q8EMWhFFksCsN2c16yXy3Pgi",
+    "symbol": "TOK3PGI",
+    "name": "kSOLBSOLOrca",
+    "decimals": 160,
+    "oracle_address": "BdpFTzoCHYxrpUioqGHwynoavoGe4uoix1j5iZHowgpp",
+    "market_price": "237038125"
+  },
+  {
+    "address": "CExamod1Ai3d1N8Vh7sBjt5xbZzb2VmGMAFocf7fxCzm",
+    "mint_address": "8yzH74rJpSq9vJvBqy4aep68Vj2q7RJt4bQqBA5n8ELw",
+    "symbol": "TOK8ELW",
+    "name": "hSOL",
+    "decimals": 0,
+    "oracle_address": "3Ddc4jPS7jESWWK8oqPdFNjGzSwyuBxuTcFSEUPoQdV5",
+    "market_price": "108656442952553498646163872703471537955"
+  },
+  {
+    "address": "H9vmCVd77N1HZa36eBn3UnftYmg4vQzPfm1RxabHAMER",
+    "mint_address": "8yzH74rJpSqD97bLeJE6EmvZr9fFqRr1YxL5fTtuqHTM",
+    "symbol": "TOKQHTM",
+    "name": "bSOL",
+    "decimals": 219,
+    "oracle_address": "NaWQBTZSrKA56cQVtf9Hmq1hoXNSz9UeQW6T6R8w9a9",
+    "market_price": "9558468994589692339577853828353298832"
+  },
+  {
+    "address": "37Jk2zkz23vkAYBT66HM2gaqJuNg2nYLsCreQAVt5MWK",
+    "mint_address": "8yzH74rJpSqM2gn3i3ZqipH5Ut4Wdd3pjrHuqAyJ7kib",
+    "symbol": "TOK7KIB",
+    "name": "cbBTC",
+    "decimals": 215,
+    "oracle_address": "D1LQmMRx2CrnYzrfpP5Sr9MXAns41oR2oJH19vcFB1Qu",
+    "market_price": "249284551759791925808514612511715430136"
+  },
+  {
+    "address": "DGQZWCY17gGtBUgdaFs1VreJWsodkjFxndPsskwFKGpp",
+    "mint_address": "8yzH74rJpSq9vJvBqy4aep68Vj2q7RJt4bQqBA5n8ELw",
+    "symbol": "TOK8ELW",
+    "name": "JupSOL",
+    "decimals": 0,
+    "oracle_address": "98LhSvnKh5LauWabGhboSdesfGgqWwUGagAZFrj7SoMn",
+    "market_price": "283086278099832210810020835047922420440"
+  },
+  {
+    "address": "6U9CnJYCQwHUEmf4Pq4oGVKHVvD29wZvtPbFNjYmgjaF",
+    "mint_address": "8yzH74rJpSq9vJvBqy4aep68Vj2q7RJt4bQqBA5n8ELw",
+    "symbol": "TOK8ELW",
+    "name": "bbSOL",
+    "decimals": 0,
+    "oracle_address": "5pyYTyqPqtignHh7BjXTtdZ1QW99Pwy1QCURZucH2dDa",
+    "market_price": "37134713114011095906457041116385384201"
+  },
+  {
+    "address": "2gc9Dm1eB6UgVYFBUN9bWks6Kes9PbWSaPaa9DqyvEiN",
+    "mint_address": "8yzH74rJpSqSVXzitkBwK8NhuCCdEXsXpFVDTMwfQFHo",
+    "symbol": "TOKQFHO",
+    "name": "PYUSD",
+    "decimals": 16,
+    "oracle_address": "DYyarwHE8yrTDGxtUKJRKXe2zx4hYke7km7h5hJBW1At",
+    "market_price": "65909778708002887246353643640493590235"
+  },
+  {
+    "address": "DaGyAQJrdkLCzYZiUWg49NV8vabDnhR7ETwLu5eQgL56",
+    "mint_address": "8yzH74rJpSqTVkyiYMhJtcbQ6LRg9dCiyQ4tW9Pe3Gor",
+    "symbol": "TOK3GOR",
+    "name": "USDH",
+    "decimals": 201,
+    "oracle_address": "HeAFvAq4CAkBkn43pU2NaAUHDX4vw48yJPRHxU4yt8Zh",
+    "market_price": "284477604216879594477669939865051074810"
+  },
+  {
+    "address": "EGPE45iPkme8G8C1xFDNZoZeHdP3aRYtaAfAQuuwrcGZ",
+    "mint_address": "8yzH74rJpSqQc6ud8g9zW6dvSwxyXXoYeWykCEqwYS8m",
+    "symbol": "TOKYS8M",
+    "name": "EURC",
+    "decimals": 11,
+    "oracle_address": "A9fNqu34ENaCu3a9FyByaYDDGWhZy352wZzwA6ZxrabE",
+    "market_price": "5787681119959330764924809246613345987"
+  },
+  {
+    "address": "BvafE5Sm6rLrBbVRtJ2FkCzfNJQ2TjcL8bvPZULUDYrt",
+    "mint_address": "8yzH74rJpSqPh1VcXGVrQCvCLN9EDWUsTvYBJK7Va7Ny",
+    "symbol": "TOKA7NY",
+    "name": "cgntSOL",
+    "decimals": 135,
+    "oracle_address": "GGzbWpP5GnJJjkMy2AbMd1SgPv5Xa9msbv3SuRZtDZQx",
+    "market_price": "43181539815469022774000839160657999991"
+  },
+  {
+    "address": "Fqjbo3L4NAyzPcy6swv1XXLm1c7tUTKWMDkjCo9mfSDq",
+    "mint_address": "8yzH74rJpSq9vJvBqy4aep68Vj2q7RJt4bQqBA5n8ELw",
+    "symbol": "TOK8ELW",
+    "name": "bnSOL",
+    "decimals": 0,
+    "oracle_address": "HQdvgaxSPuzdgUA1XT578xf31st9bHgRyZhX7dGDqe9p",
+    "market_price": "305524506524009066377651711170765651813"
+  },
+  {
+    "address": "B5uYvxUcwX5fCB4msGU4DaHh8k6fsSkKHNboy94F9vbt",
+    "mint_address": "8yzH74rJpSqTJdNn8h8AhUQqvpE3Jh77qxEnxdi45jZx",
+    "symbol": "TOK5JZX",
+    "name": "hubSOL",
+    "decimals": 87,
+    "oracle_address": "4ysQkzhJ9YsSSEHiEnwP23dbg4DN6ekgYMxXZccQZyWn",
+    "market_price": "82515824261808721152627879282133677293"
+  },
+  {
+    "address": "HMCXsf1jFUDbvGGhvUzCzwkKbmUhxhxz7gYZwXpTuReT",
+    "mint_address": "8yzH74rJpSqU4WBACRWTB5QyPn1R7TyR4GuVU7zhZ2th",
+    "symbol": "TOKZ2TH",
+    "name": "laineSOL",
+    "decimals": 3,
+    "oracle_address": "FVnLLJZCjmATgaept6MdSN8sMm6YDvWoXntZQ85YDUVs",
+    "market_price": "53560917812066086265397333772755412632"
+  },
+  {
+    "address": "BHUi32TrEsfN2U821G4FprKrR4hTeK4LCWtA3BFetuqA",
+    "mint_address": "8yzH74rJpSqGqhNRCk4NaRWguW4nf3uauVKCAS5CmfBA",
+    "symbol": "TOKMFBA",
+    "name": "USDS",
+    "decimals": 198,
+    "oracle_address": "FoFULYe77eUezecqMqTUqzZYZfvZBv4AygRss1ToVzBC",
+    "market_price": "231845198842453365711989486322548024200"
+  },
+  {
+    "address": "D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59",
+    "mint_address": "8yzH74rJpSqZBKcXPfdCYP1bVnPbpdU5J149e2wi2VP8",
+    "symbol": "TOK2VP8",
+    "name": "USDC",
+    "decimals": 136,
+    "oracle_address": "CB2TZVs3EzubrZxsjvDSZBcjGpDx1ZyUET5DyCC4zMk9",
+    "market_price": "13749311333688658169769472892414889987"
+  },
+  {
+    "address": "4AFAGAm5G8fkcKy7QerL88E7BiSE22ZRbvJzvaKjayor",
+    "mint_address": "8yzH74rJpSq9vJvBqy4aep68Vj2q7RJt4bQqBA5n8ELw",
+    "symbol": "TOK8ELW",
+    "name": "JUP",
+    "decimals": 0,
+    "oracle_address": "BuKFeTDydEkcbT9WPt6WnU2Zvm3GA9DxZS6XweFbL1cJ",
+    "market_price": "2205193816"
+  },
+  {
+    "address": "75WrtSz7rLCdBvAQhtHi8M2jC8HnpT8iUxcYkdeawr37",
+    "mint_address": "8yzH74rJpSqVnvK3opEztweKcZeJ8m5fyHqU6grjKY4T",
+    "symbol": "TOKKY4T",
+    "name": "kSOLJITOSOLRaydium",
+    "decimals": 137,
+    "oracle_address": "E5dGmVT8CfdSv3zu5zd1krztS6evr6xySUfX6PqHKagj",
+    "market_price": "1234365346971"
+  },
+  {
+    "address": "Hcz1o77tF9TpdEHcvrx29tz7SBKoQEwJA1wuJqGZYnTw",
+    "mint_address": "8yzH74rJpSq9vJvBqy4aep68Vj2q7RJt4bQqBA5n8ELw",
+    "symbol": "TOK8ELW",
+    "name": "tBTC",
+    "decimals": 0,
+    "oracle_address": "61RS4DT6Y2qJjTcCM4cW73HYSC6UC7S2EiVRRWsmj4DZ",
+    "market_price": "302710300562021122942708085829482508307"
+  },
+  {
+    "address": "Ht9NoB1udjpRqws1sCw1j2dL7MeTDHYCDdDFkbc1Arst",
+    "mint_address": "8yzH74rJpSqURV9qghXsk9CUyg7ohoaYorSZuHux4ntq",
+    "symbol": "TOK4NTQ",
+    "name": "bonkSOL",
+    "decimals": 56,
+    "oracle_address": "8BwxBLsykvDq2uo6tyYUayiFFHyZSYYqQ5K13hxrE6ek",
+    "market_price": "158096706621310175749491454296256151019"
+  },
+  {
+    "address": "H3t6qZ1JkguCNTi9uzVKqQ7dvt2cum4XiXWom6Gn5e5S",
+    "mint_address": "8yzH74rJpSqGSVwduX6j2eQgMU6KhHza3HthknnKbpx9",
+    "symbol": "TOKBPX9",
+    "name": "USDT",
+    "decimals": 21,
+    "oracle_address": "BgVZ3Mj6Z4DDXMb6CxtmAC5hd9NvA5SrWu8bMZmNUvZ3",
+    "market_price": "294143277621943786581999210066524857930"
+  },
+  {
+    "address": "ESCkPWKHmgNE7Msf77n9yzqJd5kQVWWGy3o5Mgxhvavp",
+    "mint_address": "8yzH74rJpSqDJomUMXcYngp1zJPggGgUi6qvZV6mGqaU",
+    "symbol": "TOKGQAU",
+    "name": "USDG",
+    "decimals": 79,
+    "oracle_address": "Btyn6KvPuDFkjrRNZQsrUhP8c86fHir1jygv1A2HJ75f",
+    "market_price": "282605215974819424812927174727371725300"
+  }
+]

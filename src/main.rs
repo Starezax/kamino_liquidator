@@ -11,10 +11,11 @@ use serde::{Deserialize, Serialize};
 use std::fs::File;
 use std::io::Write;
 use std::time::Duration;
+use std::collections::HashMap;
 
 #[derive(Serialize, Deserialize, Debug)]
-struct ObligationJson {
-    address: String,
+struct ObligationTokenInfo {
+    obligation_address: String,
     owner: String,
     deposited_value: String,
     borrowed_value: String,
@@ -22,20 +23,13 @@ struct ObligationJson {
     unhealthy_borrow_value: String,
     active_deposits_count: usize,
     active_borrows_count: usize,
-    borrows: Vec<BorrowJson>,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-struct BorrowJson {
-    borrow_number: usize,
-    reserve: String,
-    borrowed_amount: String,
-    market_value: String,
+    reserve_addresses: Vec<String>,
+    token_symbols: Vec<String>,
 }
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("info"))
+    env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("warn"))
         .init();
     
     dotenv::from_path(std::path::PathBuf::from(".env")).ok();
@@ -46,7 +40,7 @@ async fn main() -> Result<()> {
     
     let rpc_client = RpcClient::new_with_timeout_and_commitment(
         rpc_url,
-        Duration::from_secs(60), // 60 second timeout
+        Duration::from_secs(60),
         CommitmentConfig::confirmed()
     );
     
@@ -68,67 +62,53 @@ async fn main() -> Result<()> {
     
     info!("Found {} obligations with active borrows", obligations_with_borrows.len());
     
-    let mut obligations_json = Vec::new();
+    // Create obligation:token HashMap
+    let mut obligation_token_map: HashMap<String, ObligationTokenInfo> = HashMap::new();
 
-    for (i, (obligation, address)) in obligations_with_borrows.iter().enumerate() {
-        info!("Processing obligation with borrows #{} - {}", i+1, address);
-
+    for (obligation, address) in obligations_with_borrows.iter() {
         let active_deposits_count = obligation.deposits.iter()
             .filter(|deposit| deposit.deposit_reserve != Pubkey::default())
             .count();
         
-        let active_borrows = obligation.borrows.iter()
+        let active_borrows_count = obligation.borrows.iter()
             .filter(|borrow| borrow.borrow_reserve != Pubkey::default() && borrow.borrowed_amount_sf > 0)
-            .collect::<Vec<_>>();
+            .count();
 
-        let mut borrows_json = Vec::new();
-        for (j, borrow) in active_borrows.iter().enumerate() {
-            let borrow_json = BorrowJson {
-                borrow_number: j + 1,
-                reserve: borrow.borrow_reserve.to_string(),
-                borrowed_amount: borrow.borrowed_amount_sf.to_string(),
-                market_value: borrow.market_value_sf.to_string(),
-            };
-            borrows_json.push(borrow_json);
-        }
+        // Get all reserve addresses
+        let reserve_addresses = obligation.get_reserve_addresses();
+        let reserve_address_strings: Vec<String> = reserve_addresses.iter()
+            .map(|addr| addr.to_string())
+            .collect();
 
-        let obligation_json = ObligationJson {
-            address: address.to_string(),
+        // Generate token symbols from reserve addresses using mint extraction
+        let token_symbols = utils::get_token_symbols_from_reserves(
+            &rpc_client, 
+            &program_id, 
+            reserve_addresses
+        ).await;
+
+        let obligation_info = ObligationTokenInfo {
+            obligation_address: address.to_string(),
             owner: obligation.owner.to_string(),
             deposited_value: obligation.deposited_value_sf.to_string(),
             borrowed_value: obligation.borrowed_assets_market_value_sf.to_string(),
             allowed_borrow_value: obligation.allowed_borrow_value_sf.to_string(),
             unhealthy_borrow_value: obligation.unhealthy_borrow_value_sf.to_string(),
             active_deposits_count,
-            active_borrows_count: active_borrows.len(),
-            borrows: borrows_json,
+            active_borrows_count,
+            reserve_addresses: reserve_address_strings,
+            token_symbols,
         };
         
-        obligations_json.push(obligation_json);
-        
-        info!("  Owner: {}", obligation.owner);
-        info!("  Deposited value: {}", obligation.deposited_value_sf);
-        info!("  Borrowed value: {}", obligation.borrowed_assets_market_value_sf);
-        info!("  Allowed borrow value: {}", obligation.allowed_borrow_value_sf);
-        info!("  Unhealthy borrow value: {}", obligation.unhealthy_borrow_value_sf);
-        info!("  Active deposits: {}", active_deposits_count);
-        info!("  Active borrows: {}", active_borrows.len());
-
-        for (j, borrow) in active_borrows.iter().enumerate() {
-            info!("    Borrow #{}: Reserve: {}, Amount: {}, Market Value: {}", 
-                j+1, 
-                borrow.borrow_reserve, 
-                borrow.borrowed_amount_sf, 
-                borrow.market_value_sf
-            );
-        }
+        obligation_token_map.insert(address.to_string(), obligation_info);
     }
 
-    let json_string = serde_json::to_string_pretty(&obligations_json)?;
-    let mut file = File::create("obligations_with_borrows.json")?;
+    // Save the obligation:token map
+    let json_string = serde_json::to_string_pretty(&obligation_token_map)?;
+    let mut file = File::create("obligation_token_map.json")?;
     file.write_all(json_string.as_bytes())?;
     
-    info!("Successfully wrote {} obligations to obligations_with_borrows.json", obligations_json.len());
+    info!("Successfully wrote {} obligation:token pairs to obligation_token_map.json", obligation_token_map.len());
 
     Ok(())
 }
