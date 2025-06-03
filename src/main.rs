@@ -26,12 +26,13 @@ struct ObligationInfo {
     active_borrows_count: usize,
     deposits: Vec<DepositInfo>,
     borrows: Vec<BorrowInfo>,
-    token_mints: Vec<String>,
+    all_token_mints: Vec<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 struct DepositInfo {
     reserve_address: String,
+    token_mint: String,
     deposited_amount: u64,
     market_value: String,
 }
@@ -39,6 +40,7 @@ struct DepositInfo {
 #[derive(Serialize, Deserialize, Debug)]
 struct BorrowInfo {
     reserve_address: String,
+    token_mint: String,
     borrowed_amount: String,
     market_value: String,
 }
@@ -82,7 +84,6 @@ async fn main() -> Result<()> {
         return Ok(());
     }
     
-    // Collect all unique reserve addresses
     println!("Collecting unique reserve addresses...");
     let mut all_reserve_addresses = HashSet::new();
     for (obligation, _) in &obligations_with_borrows {
@@ -95,41 +96,51 @@ async fn main() -> Result<()> {
     let unique_reserves: Vec<Pubkey> = all_reserve_addresses.into_iter().collect();
     println!("Found {} unique reserves", unique_reserves.len());
     
-    // Fetch all reserves in batches
     println!("Fetching reserves in batches...");
     let reserve_to_mint_map = utils::create_reserve_to_mint_mapping(&rpc_client, &program_id, unique_reserves).await?;
     
-    // Process obligations and create detailed info
     let mut obligations_info = Vec::new();
     
     println!("Processing {} obligations...", obligations_with_borrows.len());
     
     for (obligation, address) in &obligations_with_borrows {
         let reserve_addresses = obligation.get_reserve_addresses();
-        let token_mints: Vec<String> = reserve_addresses
+        let all_token_mints: Vec<String> = reserve_addresses
             .iter()
             .map(|addr| reserve_to_mint_map.get(addr).cloned().unwrap_or_else(|| "UNKNOWN".to_string()))
             .collect();
         
-        // Process deposits
         let deposits: Vec<DepositInfo> = obligation.deposits
             .iter()
             .filter(|deposit| deposit.deposit_reserve != Pubkey::default())
-            .map(|deposit| DepositInfo {
-                reserve_address: deposit.deposit_reserve.to_string(),
-                deposited_amount: deposit.deposited_amount,
-                market_value: deposit.market_value_sf.to_string(),
+            .map(|deposit| {
+                let token_mint = reserve_to_mint_map.get(&deposit.deposit_reserve)
+                    .cloned()
+                    .unwrap_or_else(|| "UNKNOWN".to_string());
+                
+                DepositInfo {
+                    reserve_address: deposit.deposit_reserve.to_string(),
+                    token_mint,
+                    deposited_amount: deposit.deposited_amount,
+                    market_value: deposit.market_value_sf.to_string(),
+                }
             })
             .collect();
         
-        // Process borrows
         let borrows: Vec<BorrowInfo> = obligation.borrows
             .iter()
             .filter(|borrow| borrow.borrow_reserve != Pubkey::default() && borrow.borrowed_amount_sf > 0)
-            .map(|borrow| BorrowInfo {
-                reserve_address: borrow.borrow_reserve.to_string(),
-                borrowed_amount: borrow.borrowed_amount_sf.to_string(),
-                market_value: borrow.market_value_sf.to_string(),
+            .map(|borrow| {
+                let token_mint = reserve_to_mint_map.get(&borrow.borrow_reserve)
+                    .cloned()
+                    .unwrap_or_else(|| "UNKNOWN".to_string());
+                
+                BorrowInfo {
+                    reserve_address: borrow.borrow_reserve.to_string(),
+                    token_mint,
+                    borrowed_amount: borrow.borrowed_amount_sf.to_string(),
+                    market_value: borrow.market_value_sf.to_string(),
+                }
             })
             .collect();
         
@@ -146,13 +157,12 @@ async fn main() -> Result<()> {
             active_borrows_count: borrows.len(),
             deposits,
             borrows,
-            token_mints,
+            all_token_mints,
         };
         
         obligations_info.push(obligation_info);
     }
 
-    // Write to JSON file
     let json_string = serde_json::to_string_pretty(&obligations_info)?;
     let mut file = File::create("obligations_detailed.json")?;
     file.write_all(json_string.as_bytes())?;

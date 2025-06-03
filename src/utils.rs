@@ -125,14 +125,12 @@ pub async fn create_reserve_to_mint_mapping(
 }
 
 pub fn try_extract_mint_from_reserve(data: &[u8]) -> Option<Pubkey> {
-    // From the TypeScript filter, the mint is at offset 128
     let offset = 128;
     
     if data.len() >= offset + 32 {
         let mint_bytes = &data[offset..offset + 32];
         if let Ok(mint_array) = mint_bytes.try_into() {
             let pubkey = Pubkey::new_from_array(mint_array);
-            // Basic validation - check if it's not all zeros and not the system program
             if pubkey != Pubkey::default() && 
                pubkey.to_string() != "11111111111111111111111111111111" {
                 return Some(pubkey);
@@ -140,7 +138,6 @@ pub fn try_extract_mint_from_reserve(data: &[u8]) -> Option<Pubkey> {
         }
     }
 
-    // Try other common offsets as fallback
     let possible_offsets = [56, 88, 120, 160];
 
     for offset in possible_offsets {
