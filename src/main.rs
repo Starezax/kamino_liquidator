@@ -67,7 +67,6 @@ pub struct ObligationInfo {
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    // Initialize logging
     tracing_subscriber::fmt::init();
     
     dotenv::dotenv().ok();
@@ -105,7 +104,6 @@ async fn main() -> Result<()> {
         return Ok(());
     }
     
-    // Collect unique reserve addresses
     info!("Collecting unique reserve addresses...");
     let mut all_reserve_addresses = HashSet::new();
     for (obligation, _) in &obligations_with_borrows {
@@ -118,11 +116,9 @@ async fn main() -> Result<()> {
     let unique_reserves: Vec<Pubkey> = all_reserve_addresses.into_iter().collect();
     info!("Found {} unique reserves", unique_reserves.len());
     
-    // Fetch reserves in batches
     info!("Fetching reserves in batches...");
     let reserve_to_mint_map = utils::create_reserve_to_mint_mapping(&rpc_client, &program_id, unique_reserves).await?;
     
-    // Get all unique token mints
     let all_token_mints: HashSet<String> = reserve_to_mint_map.values()
         .filter(|mint| *mint != "UNKNOWN" && *mint != "PARSE_FAIL" && *mint != "INVALID" && *mint != "NOT_FOUND")
         .cloned()
@@ -131,17 +127,14 @@ async fn main() -> Result<()> {
     let token_mints: Vec<String> = all_token_mints.into_iter().collect();
     info!("Found {} unique token mints", token_mints.len());
     
-    // Create and start CONSOLIDATED price listener
     let price_listener = PriceListener::new(token_mints);
     let price_listener_arc = Arc::new(price_listener);
     
-    // Start the CONSOLIDATED price listener
     let _price_task_handle = price_listener_arc.start();
     
     info!("Starting obligation processing (waiting 30s for REAL Pyth prices)...");
     tokio::time::sleep(Duration::from_secs(30)).await;
     
-    // Process obligations
     let obligations_with_borrows = Arc::new(obligations_with_borrows);
     let reserve_to_mint_map = Arc::new(reserve_to_mint_map);
     
@@ -161,7 +154,6 @@ async fn main() -> Result<()> {
                 .map(|addr| reserve_to_mint_map.get(addr).cloned().unwrap_or_else(|| "UNKNOWN".to_string()))
                 .collect();
             
-            // Collect live prices for this obligation
             let mut live_prices: HashMap<String, PriceInfo> = HashMap::new();
             for mint in &all_token_mints {
                 if let Some(price_info) = get_current_price_info(mint) {
@@ -263,7 +255,6 @@ async fn main() -> Result<()> {
         info!("Updated obligations file (#{}) - {} obligations, {} Pyth prices", 
               update_counter, obligations_info.len(), total_live_prices);
         
-        // Wait 20 seconds before next update
         tokio::time::sleep(Duration::from_secs(20)).await;
     }
 }

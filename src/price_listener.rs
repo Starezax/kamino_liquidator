@@ -25,7 +25,6 @@ pub struct TokenPrice {
     pub status: String,
 }
 
-// Global price storage
 pub static PRICE_STATE: Lazy<Arc<DashMap<String, TokenPrice>>> =
     Lazy::new(|| Arc::new(DashMap::new()));
 
@@ -33,7 +32,6 @@ pub fn get_price_state() -> Arc<DashMap<String, TokenPrice>> {
     Arc::clone(&PRICE_STATE)
 }
 
-// Simplified Listener trait
 pub trait Listener: Send + Sync + 'static {
     fn get_subscription_request(&self) -> SubscribeRequest;
     fn handle_update(&self, update: UpdateOneof);
@@ -50,7 +48,6 @@ impl PriceListener {
     pub fn new(token_mints: Vec<String>) -> Self {
         info!("Setting up Pyth price listener for {} token mints", token_mints.len());
         
-        // Get REAL working Pyth price accounts
         let (price_accounts, account_to_mint) = get_real_working_pyth_accounts(&token_mints);
         
         info!("Processing token mints for Pyth price accounts:");
@@ -71,7 +68,6 @@ impl PriceListener {
         info!("   REAL Pyth price accounts found: {}", price_accounts.len());
         info!("   Will subscribe to {} REAL price accounts", price_accounts.len());
 
-        // Start heartbeat monitor
         let account_count = price_accounts.len();
         tokio::spawn(async move {
             let mut interval = tokio::time::interval(Duration::from_secs(30));
@@ -97,7 +93,6 @@ impl PriceListener {
         }
     }
 
-    // Standalone start method that doesn't conflict with trait bounds
     pub fn start(self: Arc<Self>) -> tokio::task::JoinHandle<()> {
         tokio::spawn(async move {
             start_price_listener(self).await;
@@ -105,7 +100,6 @@ impl PriceListener {
     }
 }
 
-// Standalone async function to avoid trait lifetime issues
 async fn start_price_listener(listener: Arc<PriceListener>) {
     let grpc_url = "https://solana-yellowstone-grpc.publicnode.com:443";
     let retry_delay = tokio::time::Duration::from_secs(2);
@@ -144,7 +138,7 @@ async fn start_price_listener(listener: Arc<PriceListener>) {
                                 }
                                 Err(e) => {
                                     error!("{} stream error: {:?}", listener.name(), e);
-                                    break;  // Break inner loop to trigger reconnection
+                                    break;
                                 }
                             }
                         }
@@ -196,7 +190,6 @@ impl Listener for PriceListener {
             if let Some(mint) = self.account_to_mint.get(&account_pubkey) {
                 let symbol = get_token_symbol(mint);
                 
-                // Parse REAL Pyth price account using standard format
                 if let Some(price_info) = parse_real_pyth_price_account(&account_info.data, mint) {
                     let old_price = PRICE_STATE.get(mint).map(|entry| entry.price);
                     PRICE_STATE.insert(mint.clone(), price_info.clone());
@@ -213,12 +206,10 @@ impl Listener for PriceListener {
                                   price_info.symbol, price_info.price);
                         }
                         _ => {
-                            // Silent update for small changes
                         }
                     }
                 } else {
                     warn!("   Failed to parse REAL Pyth data for {} (account: {})", symbol, account_pubkey);
-                    // Debug the account data structure
                     if account_info.data.len() >= 8 {
                         info!("   Account size: {} bytes, first 32 bytes: {:02x?}", 
                               account_info.data.len(), &account_info.data[..32.min(account_info.data.len())]);
@@ -238,7 +229,7 @@ impl Listener for PriceListener {
 
         let account_filter = SubscribeRequestFilterAccounts {
             account: self.price_accounts.iter().map(|k| k.to_string()).collect(),
-            owner: vec![], // We're subscribing to specific accounts, not by owner
+            owner: vec![],
             filters: vec![],
             ..Default::default()
         };
@@ -265,22 +256,19 @@ impl Listener for PriceListener {
     }
 }
 
-// Use ACTUAL WORKING Pyth price account addresses (VERIFIED)
 fn get_real_working_pyth_accounts(token_mints: &[String]) -> (Vec<Pubkey>, HashMap<Pubkey, String>) {
     let mut price_accounts = Vec::new();
     let mut account_to_mint = HashMap::new();
     
-    // These are VERIFIED WORKING Pyth price account addresses on Solana mainnet
     let verified_accounts = [
-        // (mint, VERIFIED_WORKING_price_account_address)
-        ("So11111111111111111111111111111111111111112", "H6ARHf6YXtGYeQkjqmvb4v1RcCc7o2Fa6DksJYRHdKjEe"), // SOL/USD
-        ("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", "Gnt27xtC473ZT2Mw5u8wZ68Z3gULkSTb5DuxJy7eJotD"), // USDC/USD
-        ("Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB", "3vxLXJqLqF3JG5TCbYycbKWRBbCJQLxQmBGCkyqEEefL"), // USDT/USD
-        ("7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs", "JBu1AL4obBcCMqKBBxhpWCNUt136ijcuMZLFvTP7iWdB"), // ETH/USD
-        ("9n4nbM75f5Ui33ZbPYXn59EwSgE8CGsHtAeTH5YFeJ9E", "GVXRSBjFk6e6J3NbVPXohDJetcTjaeeuykUpbQF8UoMU"), // BTC/USD
-        ("mSoLzYCxHdYgdzU16g5QSh3i5K3z3KZK7ytfqcJm7So", "E4v1BBgoso9s64TQvmyownAVJbhbEPGyzA3qn4n46qj9"), // mSOL/USD
-        ("J1toso1uCk3RLmjorhTtrVwY9HJ7X8V9yYac6Y7kGCPn", "7yyaeuJ1GGtVBLT2z2xub5ZWYKaNhF28mj1RdV4VDFVk"), // jitoSOL/USD
-        ("bSo13r4TkiE4KumL71LsHTPpL2euBYLFx6h9HP3piy1", "AFrYBhb5wKQtxRS9UA9YRS4V3dwFm7SqmS6DHKq6YVgo"), // bSOL/USD
+        ("So11111111111111111111111111111111111111112", "H6ARHf6YXtGYeQkjqmvb4v1RcCc7o2Fa6DksJYRHdKjEe"),
+        ("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", "Gnt27xtC473ZT2Mw5u8wZ68Z3gULkSTb5DuxJy7eJotD"),
+        ("Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB", "3vxLXJqLqF3JG5TCbYycbKWRBbCJQLxQmBGCkyqEEefL"),
+        ("7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs", "JBu1AL4obBcCMqKBBxhpWCNUt136ijcuMZLFvTP7iWdB"),
+        ("9n4nbM75f5Ui33ZbPYXn59EwSgE8CGsHtAeTH5YFeJ9E", "GVXRSBjFk6e6J3NbVPXohDJetcTjaeeuykUpbQF8UoMU"),
+        ("mSoLzYCxHdYgdzU16g5QSh3i5K3z3KZK7ytfqcJm7So", "E4v1BBgoso9s64TQvmyownAVJbhbEPGyzA3qn4n46qj9"),
+        ("J1toso1uCk3RLmjorhTtrVwY9HJ7X8V9yYac6Y7kGCPn", "7yyaeuJ1GGtVBLT2z2xub5ZWYKaNhF28mj1RdV4VDFVk"),
+        ("bSo13r4TkiE4KumL71LsHTPpL2euBYLFx6h9HP3piy1", "AFrYBhb5wKQtxRS9UA9YRS4V3dwFm7SqmS6DHKq6YVgo"),
     ];
 
     for (mint, price_account_str) in verified_accounts {
@@ -303,30 +291,25 @@ fn get_real_working_pyth_accounts(token_mints: &[String]) -> (Vec<Pubkey>, HashM
     (price_accounts, account_to_mint)
 }
 
-// Parse REAL Pyth price account (standard format)
 fn parse_real_pyth_price_account(data: &[u8], mint: &str) -> Option<TokenPrice> {
-    // Standard Pyth price account structure - 240 bytes
     if data.len() < 240 {
         info!("   Account too small: {} bytes (need 240+)", data.len());
         return None;
     }
 
-    // Standard Pyth price account offsets (verified working)
-    let price_offset = 208;      // Price value
-    let expo_offset = 216;       // Price exponent  
-    let conf_offset = 224;       // Price confidence
-    let status_offset = 232;     // Price status
+    let price_offset = 208;
+    let expo_offset = 216;
+    let conf_offset = 224;
+    let status_offset = 232;
 
     if data.len() < status_offset + 4 {
         return None;
     }
 
-    // Read status first
     let status = u32::from_le_bytes(
         data[status_offset..status_offset + 4].try_into().ok()?
     );
 
-    // Status 1 = Trading (valid price)
     if status != 1 {
         info!("   {} price status not trading: {}", get_token_symbol(mint), status);
         return Some(TokenPrice {
@@ -339,7 +322,6 @@ fn parse_real_pyth_price_account(data: &[u8], mint: &str) -> Option<TokenPrice> 
         });
     }
 
-    // Read price components
     let price_raw = i64::from_le_bytes(
         data[price_offset..price_offset + 8].try_into().ok()?
     );
@@ -357,14 +339,12 @@ fn parse_real_pyth_price_account(data: &[u8], mint: &str) -> Option<TokenPrice> 
         return None;
     }
 
-    // Calculate actual price using exponent
     let price = (price_raw as f64) * 10f64.powi(expo);
     let confidence = (conf_raw as f64) * 10f64.powi(expo);
 
     info!("   {} raw_price={}, expo={}, calculated_price={:.6}", 
           get_token_symbol(mint), price_raw, expo, price);
 
-    // Sanity check
     if price > 0.0 && price < 10_000_000.0 {
         Some(TokenPrice {
             mint: mint.to_string(),
